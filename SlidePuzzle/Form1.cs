@@ -460,7 +460,7 @@ namespace SlidePuzzle
                 //mio.Checked = true;
                 
                 imageFileName = ofn.FileName;
-                for (int i = 1; i < (numberOfColsRows * numberOfColsRows); i++)
+                for (int i = 1; i < (numberOfColsRows * numberOfColsRows) + 1; i++)
                 {
                     PuzzlePieces[i].ImageFileName = imageFileName;
                     PuzzlePieces[i].SetCorrectPosition(PuzzlePieces[i].CorrectPosition, numberOfColsRows);
