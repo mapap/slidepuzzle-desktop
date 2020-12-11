@@ -1,41 +1,19 @@
-﻿using System;
-using System.Drawing;
-using System.Collections;
-using System.Windows.Media.Imaging;
-using System.Windows;
+﻿using System.Drawing;
 
 namespace SlidePuzzle
 {
     public class PuzzlePiece
     {
-        private string PPimageFileName;
-        private int PPImagePosition;
-        private int PPCorrectPosition;
-        private Image bMapImage;
-        private Rectangle recta;
-
-        public string ImageFileName
-        {
-            set
-            {
-                PPimageFileName=value;
-            }
-            get
-            {
-                return PPimageFileName;
-            }
-        }
-
-        public Rectangle rect
-        {
-            get
-            {
-                return recta;
-            }
-        }
+        public Rectangle Rectangle { get { return _rect; } }
+        public string ImageFileName { get; set; }
+        public Image BitmapImage { get; private set; }
+        public int CorrectPosition { get; private set; }
+        public int ImagePosition { get; private set; }
+        private Rectangle _rect;
+ 
         public void SetCorrectPosition(int pos, int rows)
         {
-            PPCorrectPosition = pos;
+            CorrectPosition = pos;
             
             //set image
             int cols = rows;  //square grid
@@ -43,16 +21,16 @@ namespace SlidePuzzle
             int CropX = 0;
             int CropY = 0;
             int cntPos = 0;
-           
-            bMapImage = new Bitmap(PPimageFileName);
 
-            if (bMapImage.Width < bMapImage.Height)
+            BitmapImage = new Bitmap(ImageFileName);
+
+            if (BitmapImage.Width < BitmapImage.Height)
             {
-                imgSize = bMapImage.Width;
+                imgSize = BitmapImage.Width;
             }
             else
             {
-                imgSize = bMapImage.Height;
+                imgSize = BitmapImage.Height;
             }
 
             imgSize /= rows;
@@ -76,29 +54,14 @@ namespace SlidePuzzle
             cropArea.Width = imgSize;
             cropArea.Height = imgSize;
 
-            Bitmap bmpImage = new Bitmap(bMapImage);
+            Bitmap bmpImage = new Bitmap(BitmapImage);
             Bitmap bmpCrop = bmpImage.Clone(cropArea, bmpImage.PixelFormat);
-            bMapImage = bmpCrop;
+            BitmapImage = bmpCrop;
+        }
 
-        
-        }
-        public int CorrectPosition
-        {
-            get
-            {
-                return PPCorrectPosition;
-            }
-        }
-        public int ImagePosition
-        {
-            get
-            {
-                return PPImagePosition;
-            }
-        }
         public void SetImagePosition(int pos, int rows)
         {
-            PPImagePosition = pos;
+            ImagePosition = pos;
 
             int imgWidth;
             int imgHeight;  //height is same as width - Image is square
@@ -112,8 +75,8 @@ namespace SlidePuzzle
             imgWidth = 450 / rows;
             imgHeight = imgWidth;
 
-            recta.Width = imgWidth;
-            recta.Height = imgHeight;
+            _rect.Width = imgWidth;
+            _rect.Height = imgHeight;
 
             imgY = border;
 
@@ -137,58 +100,9 @@ namespace SlidePuzzle
                 }
                 imgY = imgY + imgHeight;
             }
-                    recta.X=imgX;
-                    recta.Y = imgY;
 
-            //switch (PPImagePosition)
-            //{
-            //    case 1:
-            //        recta.X=10;
-            //        recta.Y=10;
-            //        break;
-            //    case 2:
-            //        recta.X = 163;
-            //        recta.Y = 10;
-            //        break;
-            //    case 3:
-            //        recta.X = 316;
-            //        recta.Y = 10;
-            //        break;
-            //    case 4:
-            //        recta.X = 10;
-            //        recta.Y = 163;
-            //        break;
-            //    case 5:
-            //        recta.X = 163;
-            //        recta.Y = 163;
-            //        break;
-            //    case 6:
-            //        recta.X = 316;
-            //        recta.Y = 163;
-            //        break;
-            //    case 7:
-            //        recta.X = 10;
-            //        recta.Y = 316;
-            //        break;
-            //    case 8:
-            //        recta.X = 163;
-            //        recta.Y = 316;
-            //        break;
-            //    case 9:
-            //        recta.X = 316;
-            //        recta.Y = 316;
-            //        break;
-
-            //}
+            _rect.X=imgX;
+            _rect.Y = imgY;
         }
-        
-        public Image bMap
-        {
-            get
-            {
-                return bMapImage;
-            }
-        }
-
     }
 }
