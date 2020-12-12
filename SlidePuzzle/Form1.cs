@@ -17,13 +17,15 @@ namespace SlidePuzzle
         private int movesToSimulate = 500;
         private PuzzlePiece[] PuzzlePieces = new PuzzlePiece[37];
         MainMenu MyMenu;
+        private int _ticks;
 
         public Form1()
         {
             CreateFormMenus();
             InitializePuzzlePieces();
-            SimulateMoves(movesToSimulate);
+            
             InitializeComponent();
+            SimulateMoves(movesToSimulate);
 
             //have to compensate for spacers between rows
             int frmWidth = 450 + 10 + 10 + (2 * (numberOfColsRows - 1));
@@ -35,9 +37,7 @@ namespace SlidePuzzle
 
         private void InitializePuzzlePieces()
         {
-            int PiecesToDisplay;
-            
-            PiecesToDisplay = numberOfColsRows * numberOfColsRows + 1;
+            int PiecesToDisplay = numberOfColsRows * numberOfColsRows + 1;
             if (display_all_pieces) { PiecesToDisplay = (numberOfColsRows * numberOfColsRows) + 1; }
 
             for (int i = 1; i < (PiecesToDisplay); i++)
@@ -57,6 +57,8 @@ namespace SlidePuzzle
             int EmptyPosition;
             bool CanMove;
 
+            timer.Start();
+
             for (int i = 1; i < (numberOfColsRows * numberOfColsRows); i++)
             {
                 if (PuzzlePieces[i].Rectangle.Contains(mousePt))
@@ -70,7 +72,7 @@ namespace SlidePuzzle
             if (isImageClicked && !display_all_pieces)
             {
                 //get empty position
-                EmptyPosition = Empty_position();
+                EmptyPosition = GetEmptyPosition();
                 CanMove = this.CanMove(EmptyPosition, PuzzlePieces[imageClicked].ImagePosition);
                 if (CanMove)
                 {
@@ -109,7 +111,7 @@ namespace SlidePuzzle
             }
         }
 
-        private int Empty_position()
+        private int GetEmptyPosition()
         {
             ArrayList myAL = new ArrayList();
             int output = 0;
@@ -167,22 +169,21 @@ namespace SlidePuzzle
 
         private void SimulateMoves(int NumberOfMoves)
         {
-            int result;
-            int EmptyPosition;
-            int MoveCount=0;
-            bool CanMove;
+            ResetTimer();
+
             Random random = new Random();
+            int moveCount = 0;
 
             do{
-                EmptyPosition = Empty_position();
-                result = random.Next(1, numberOfColsRows * numberOfColsRows);
-                CanMove = this.CanMove(EmptyPosition, PuzzlePieces[result].ImagePosition);
-                if (CanMove)
+                var emptyPosition = GetEmptyPosition();
+                var result = random.Next(1, numberOfColsRows * numberOfColsRows);
+                bool canMove = this.CanMove(emptyPosition, PuzzlePieces[result].ImagePosition);
+                if (canMove)
                 {
-                    PuzzlePieces[result].SetImagePosition(EmptyPosition, numberOfColsRows);
-                    MoveCount++;
+                    PuzzlePieces[result].SetImagePosition(emptyPosition, numberOfColsRows);
+                    moveCount++;
                 }
-            } while(MoveCount < NumberOfMoves);
+            } while(moveCount < NumberOfMoves);
         }
         
         private void IsComplete()
@@ -198,6 +199,7 @@ namespace SlidePuzzle
             }
             if(is_complete)
             {
+                timer.Stop();
                 display_all_pieces = true;
             }
         }
@@ -429,6 +431,24 @@ namespace SlidePuzzle
             if (numberOfColsRows == 3) { submPuzzleSize3.Checked = true; }
             if (numberOfColsRows == 4) { submPuzzleSize4.Checked = true; }
             if (numberOfColsRows == 5) { submPuzzleSize5.Checked = true; }
+        }
+
+        private void timer_Tick(object sender, EventArgs e)
+        {
+            _ticks++;
+            UpdateTimerLabel();
+        }
+
+        private void UpdateTimerLabel()
+        {
+            toolStripStatusLabel.Text =$"Timer: {(_ticks / 10m).ToString()}";
+        }
+
+        private void ResetTimer()
+        {
+            _ticks = 0;
+            UpdateTimerLabel();
+            timer.Stop();
         }
     }
 }
