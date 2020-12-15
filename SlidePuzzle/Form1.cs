@@ -57,8 +57,6 @@ namespace SlidePuzzle
             int EmptyPosition;
             bool CanMove;
 
-            timer.Start();
-
             for (int i = 1; i < (numberOfColsRows * numberOfColsRows); i++)
             {
                 if (PuzzlePieces[i].Rectangle.Contains(mousePt))
@@ -197,10 +195,15 @@ namespace SlidePuzzle
                     break;
                 }
             }
-            if(is_complete)
+
+            if (is_complete)
             {
                 timer.Stop();
                 display_all_pieces = true;
+            }
+            else
+            {
+                timer.Start();
             }
         }
         private void GetCoordinates(int pos, ref int x, ref int y) 
