@@ -291,7 +291,7 @@ namespace SlidePuzzle
             MenuItem mio = (MenuItem)sender;
             mio.Checked = true;
             imageFileName = mio.Tag.ToString();
-            imageFileName = appPath + @"\" + imageFileName;
+            imageFileName = appPath + @"\images\" + imageFileName;
 
             for (int i = 1; i < (numberOfColsRows * numberOfColsRows) + 1; i++)
             {
@@ -410,7 +410,7 @@ namespace SlidePuzzle
             MenuItem submPuzzleImage5 = new MenuItem("Custom Image");
             submPuzzleImage.MenuItems.Add(submPuzzleImage5);
             imageFileName = submPuzzleImage1.Tag.ToString();
-            imageFileName = appPath + @"\" + imageFileName;
+            imageFileName = appPath + @"\images\" + imageFileName;
             submPuzzleImage1.Checked = true;
 
             // Add event handlers for the menu items. 
